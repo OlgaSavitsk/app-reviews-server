@@ -1,18 +1,25 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import dataSource from './ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MessagesModule } from './messages/messages.module';
-import dataSource from './ormconfig';
-import { ConfigModule } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { CoreModule } from './core/core.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
-    MessagesModule,
+    UsersModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot(dataSource.options),
+    AuthModule,
+    CoreModule,
+    PassportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

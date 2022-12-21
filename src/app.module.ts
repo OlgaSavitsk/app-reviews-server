@@ -19,9 +19,9 @@ import { PassportModule } from '@nestjs/passport';
     TypeOrmModule.forRoot(dataSource.options),
     AuthModule,
     CoreModule,
-    PassportModule,
+    PassportModule.register({ session: true }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

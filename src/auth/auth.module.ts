@@ -8,11 +8,21 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import * as dotenv from 'dotenv';
 import { LocalStrategy } from './strategies/local.strategy';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { SessionSerializer } from './strategies/serialize';
+import { GithubStrategy } from './strategies/github.strategy';
 
 dotenv.config();
 
 @Module({
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    GoogleStrategy,
+    GithubStrategy,
+    SessionSerializer,
+  ],
   controllers: [AuthController],
   imports: [
     UsersModule,
@@ -23,4 +33,4 @@ dotenv.config();
   ],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

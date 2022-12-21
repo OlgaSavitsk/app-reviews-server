@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsBlockedStatus } from 'src/app.constant';
 import { Role } from 'src/roles/entity/role.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -13,14 +14,14 @@ export class UserEntity {
 
   @ApiProperty({ example: 'User', description: 'Username' })
   @Column()
-  name: string;
+  username: string;
 
   @ApiProperty({ example: 'user@gmail.com', description: 'Userlogin' })
   @Column()
   login: string;
 
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  password?: string;
 
   @Column()
   createdAt?: string;
@@ -28,14 +29,17 @@ export class UserEntity {
   @Column()
   updatedAt?: string;
 
-  @Column()
+  @Column({default: IsBlockedStatus.ACTIVE_STATUS})
   status?: string;
 
+  @Column({nullable: true })
+  photos?: string;
+
   @Column({ type: 'enum', enum: Role, default: Role.USER, nullable: true })
-  roles?: Role[];
+  roles: Role[];
 
   toResponse() {
-    const { id, name, login, createdAt, updatedAt, status, roles } = this;
-    return { id, name, login, createdAt, updatedAt, status, roles };
+    const { id, username, login, createdAt, updatedAt, status, roles, photos } = this;
+    return { id, username, login, createdAt, updatedAt, status, roles, photos };
   }
 }

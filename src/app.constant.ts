@@ -1,3 +1,7 @@
+import passport from 'passport';
+import { Strategy } from 'passport-google-oauth20';
+import { User } from './users/models/users.interface';
+
 export const enum ExceptionsMessage {
   NOT_FOUND_USER = 'User not found',
   STATUS_BLOCKED = 'Your account has been locked',
@@ -10,3 +14,15 @@ export enum IsBlockedStatus {
   BLOCKED_STATUS = 'blocked',
   ACTIVE_STATUS = 'active',
 }
+
+export enum GoogleLogin {
+  GOOGLE_CLIENT_ID = '58278291806-gk1kr5l925plgihas1917prajuoed9da.apps.googleusercontent.com',
+  GOOGLE_CLIENT_SECRET = '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',
+}
+
+export enum GitHubLogin {
+  GITHUB_CLIENT_ID = 'cc2787612add3a5f6a34',
+  GITHUB_CLIENT_SECRET = 'fdb4b85db4c7783de34564b12367b92cd10c1e56',
+}
+
+export const CLIENT_URL = 'http://localhost:4200/home';

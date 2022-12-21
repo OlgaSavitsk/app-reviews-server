@@ -15,13 +15,13 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user-dto';
 import { UpdateStatusDto } from './dto/update-user-dto';
-import { UserResponse } from './models/users.interface';
 import { UsersService } from './users.service';
 import { UserEntity } from './entity/user.entity';
 import { Roles } from 'src/core/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/role.guard';
-import { AuthGuard } from '@nestjs/passport';
 import { Role } from 'src/roles/entity/role.enum';
+import { UserResponse } from './models/users.interface';
+import { AuthenticatedGuard } from '@auth/guards/github.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -33,7 +33,7 @@ export class UsersController {
     status: HttpStatus.OK,
     type: [UserEntity],
   })
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthenticatedGuard, RolesGuard)
   @Roles(Role.ADMIN)
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -71,7 +71,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   public async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body() { status }: UpdateStatusDto,
+    @Body() { status }: UpdateStatusDto
   ) {
     return await this.userService.update(id, status);
   }
@@ -82,9 +82,7 @@ export class UsersController {
   })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  public async delete(
-    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): Promise<void> {
+  public async delete(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): Promise<void> {
     return await this.userService.delete(id);
   }
 }

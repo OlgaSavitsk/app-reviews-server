@@ -2,15 +2,29 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import * as passport from 'passport';
+import * as session from 'express-session';
 
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 5000;
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    credentials: true,
+    origin: 'http://localhost:4200',
+  });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());
+  app.use(
+    session({
+      secret: 'adsftrhklc',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
   const swaggerConfig = new DocumentBuilder()
     .setTitle('App-reviews')
     .setDescription('Authorization')

@@ -1,18 +1,29 @@
+import { Role } from "src/roles/entity/role.enum";
+
 export class User {
   id: string;
-  name: string;
+  username: string;
   login: string;
-  password?: string;
+  password: string;
   createdAt?: string;
   updatedAt?: string;
   status?: string;
+  roles: Role[];
 }
 
 export interface UserResponse {
   id: string;
   login: string;
-  name: string;
+  username: string;
   createdAt?: string;
   updatedAt?: string;
+  photos?: string;
   status?: string;
+  roles: Role[];
+}
+
+export interface UserSocialLogin {
+  username: string,
+  login: string,
+  photos: string,
 }

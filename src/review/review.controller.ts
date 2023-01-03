@@ -80,7 +80,6 @@ export class ReviewController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          //new MaxFileSizeValidator({ maxSize: 200000 }),
           new FileTypeValidator({ fileType: new RegExp('.(jpg|jpeg|png|gif)$') }),
         ],
       })
@@ -121,7 +120,6 @@ export class ReviewController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          //new MaxFileSizeValidator({ maxSize: 200000 }),
           new FileTypeValidator({ fileType: new RegExp('.(jpg|jpeg|png|gif)$') }),
         ],
       })

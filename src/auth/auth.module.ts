@@ -12,8 +12,6 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { SessionSerializer } from './strategies/serialize';
 import { GithubStrategy } from './strategies/github.strategy';
 
-dotenv.config();
-
 @Module({
   providers: [
     AuthService,

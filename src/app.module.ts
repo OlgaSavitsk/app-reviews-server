@@ -9,10 +9,12 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { PassportModule } from '@nestjs/passport';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
     UsersModule,
+    ReviewModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),

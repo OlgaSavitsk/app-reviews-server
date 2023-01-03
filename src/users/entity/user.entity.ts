@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBlockedStatus } from 'src/app.constant';
+import { ReviewEntity } from 'src/review/entity/review.entity';
 import { Role } from 'src/roles/entity/role.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class UserEntity {
@@ -29,17 +30,25 @@ export class UserEntity {
   @Column()
   updatedAt?: string;
 
-  @Column({default: IsBlockedStatus.ACTIVE_STATUS})
+  @Column({ default: IsBlockedStatus.ACTIVE_STATUS })
   status?: string;
 
-  @Column({nullable: true })
+  @Column({ nullable: true })
   photos?: string;
 
   @Column({ type: 'enum', enum: Role, default: Role.USER, nullable: true })
   roles: Role[];
 
+  @OneToMany(() => ReviewEntity, (review) => review.user, {
+    cascade: true,
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  reviews: ReviewEntity[];
+
   toResponse() {
-    const { id, username, login, createdAt, updatedAt, status, roles, photos } = this;
-    return { id, username, login, createdAt, updatedAt, status, roles, photos };
+    const { id, username, login, createdAt, updatedAt, status, roles, photos, reviews } = this;
+    return { id, username, login, createdAt, updatedAt, status, roles, photos, reviews };
   }
 }

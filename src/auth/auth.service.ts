@@ -11,7 +11,7 @@ import { UserEntity } from 'src/users/entity/user.entity';
 import { Token } from './models/token.model';
 import { ExceptionsMessage, IsBlockedStatus } from 'src/app.constant';
 import { Role } from 'src/roles/entity/role.enum';
-import {  UserResponse, UserSocialLogin } from 'src/users/models/users.interface';
+import { UserResponse, UserSocialLogin } from 'src/users/models/users.interface';
 import { comparePassword, getHashData } from 'src/helpers/hash.helper';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class AuthService {
       createdAt: date,
       updatedAt: date,
       roles: userDto.roles,
-      photos: null
+      photos: null,
     });
     await this.checkUser(newUser.login);
     return newUser;
@@ -48,7 +48,10 @@ export class AuthService {
 
   async signUpGoogle(details: UserSocialLogin): Promise<UserResponse> {
     const date = String(Date.now());
-    const user = await this.userRepository.findOne({ where: { login: details.login } });
+    const user = await this.userRepository.findOne({
+      where: { login: details.login },
+      relations: ['reviews'],
+    });
     if (user) {
       const newUser = await this.userService.createUser({
         ...user,
@@ -86,18 +89,24 @@ export class AuthService {
   }
 
   async checkUser(login: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { username: login } });
+    const user = await this.userRepository.findOne({
+      where: { username: login },
+      relations: ['reviews'],
+    });
     if (!user) {
       throw new ForbiddenException(ExceptionsMessage.NOT_FOUND_USER);
     }
     if (user.status === IsBlockedStatus.BLOCKED_STATUS) {
       throw new ForbiddenException(ExceptionsMessage.STATUS_BLOCKED);
-    }   
+    }
     return user;
   }
 
   async checkUserInBd(login: string): Promise<UserResponse> {
-    const user = await this.userRepository.findOne({ where: { login: login } });
+    const user = await this.userRepository.findOne({
+      where: { login: login },
+      relations: ['reviews'],
+    });
     if (user) throw new ForbiddenException(ExceptionsMessage.ALREADY_EXISTS);
     return user;
   }
@@ -116,13 +125,14 @@ export class AuthService {
   async validateUser(name: string, password: string): Promise<UserResponse> {
     const user = await this.userRepository.findOne({
       where: { username: name },
+      relations: ['reviews'],
     });
     if (!user) {
       throw new ForbiddenException(ExceptionsMessage.NOT_FOUND_USER);
     }
     if (user.status === IsBlockedStatus.BLOCKED_STATUS) {
       throw new ForbiddenException(ExceptionsMessage.STATUS_BLOCKED);
-    }  
+    }
     const isCorrectPassword = await this.checkPassword(password, user.password);
     if (isCorrectPassword) {
       return user.toResponse();

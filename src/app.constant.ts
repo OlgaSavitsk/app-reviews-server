@@ -8,6 +8,7 @@ export const enum ExceptionsMessage {
   FORBIDDEN = 'Forbidden',
   BAD_REQUEST = 'Bad request',
   ALREADY_EXISTS = 'user exists',
+  NOT_FOUND_REVIEW = 'Review not found',
 }
 
 export enum IsBlockedStatus {

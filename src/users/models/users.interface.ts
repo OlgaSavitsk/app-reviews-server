@@ -1,3 +1,4 @@
+import { ReviewEntity } from "src/review/entity/review.entity";
 import { Role } from "src/roles/entity/role.enum";
 
 export class User {
@@ -9,6 +10,7 @@ export class User {
   updatedAt?: string;
   status?: string;
   roles: Role[];
+  reviews: ReviewEntity[]
 }
 
 export interface UserResponse {
@@ -20,6 +22,7 @@ export interface UserResponse {
   photos?: string;
   status?: string;
   roles: Role[];
+  reviews: ReviewEntity[]
 }
 
 export interface UserSocialLogin {

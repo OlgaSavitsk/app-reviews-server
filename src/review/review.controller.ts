@@ -128,7 +128,6 @@ export class ReviewController {
     )
     file: any
   ): Promise<IReview> {
-    console.log('2222', file);
     let parseReviewDto = JSON.parse(JSON.parse(JSON.stringify(updateReviewDto))['review']);
     let fname = '';
     if (file) fname = file.filename;

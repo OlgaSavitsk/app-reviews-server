@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     credentials: true,
-    origin: 'http://localhost:4200',
+    origin: 'https://app-review-d36e65.netlify.app',
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());

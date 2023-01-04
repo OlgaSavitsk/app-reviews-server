@@ -6,12 +6,12 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  MaxFileSizeValidator,
   Param,
   ParseFilePipe,
   ParseUUIDPipe,
   Post,
   Put,
+  Query,
   Req,
   Res,
   UploadedFile,
@@ -21,9 +21,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { ReviewService } from './review.service';
 import { ReviewEntity } from './entity/review.entity';
-import { CreateReviewDto } from './dto/create-review-dto';
 import { IReview } from './models/review.interface';
-import { UpdateReviewDto } from './dto/update-review.dto';
 import { UsersService } from '@users/users.service';
 import { DeleteResult } from 'typeorm';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -31,6 +29,7 @@ import { Request, Response } from 'express';
 import { Multer } from 'multer';
 import { multerOptions } from 'src/config/multerOptions';
 import { TransformInterceptor } from '@core/interceptors/transform.interceptor';
+import { GetReviewFilterDto } from './dto/get-review-filter.dto';
 
 @ApiTags('Review')
 @Controller('review')
@@ -45,7 +44,10 @@ export class ReviewController {
   })
   @Get()
   @HttpCode(HttpStatus.OK)
-  public findAll(): Promise<IReview[]> {
+  public findAll(@Query() filterDto: GetReviewFilterDto): Promise<IReview[]> {
+    if(Object.keys(filterDto).length) {
+      return this.reviewService.getReviewWithFilter(filterDto)
+    }
     return this.reviewService.findAll();
   }
 

@@ -10,6 +10,7 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { CreateReviewDto } from './dto/create-review-dto';
 import { UserResponse } from '@users/models/users.interface';
 import { UserEntity } from '@users/entity/user.entity';
+import { GetReviewFilterDto } from './dto/get-review-filter.dto';
 
 @Injectable()
 export class ReviewService {
@@ -22,6 +23,19 @@ export class ReviewService {
 
   public async findAll(): Promise<IReview[]> {
     const reviews = await this.reviewRepository.find();
+    return reviews;
+  }
+
+  public async getReviewWithFilter(filterDto: GetReviewFilterDto): Promise<IReview[]> {
+    const { search } = filterDto;
+    let reviews = await this.findAll();
+    reviews = reviews.filter(
+      (review) =>
+        review.title.includes(search) ||
+        review.name.includes(search) ||
+        review.description.includes(search) ||
+        review.category.includes(search)
+    );
     return reviews;
   }
 

@@ -7,6 +7,8 @@ export interface IReview {
   description: string;
   rating: number;
   img: any;
-  filePath: string
- // userId: string | null;
+  filePath: string,
+  score: number;
+  like?: number;
+  createdAt?: string;
 }

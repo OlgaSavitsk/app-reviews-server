@@ -12,7 +12,7 @@ import { AuthenticatedGuard, GithubAuthGuard } from './guards/github.guard';
 import { GoogleAuthGuard } from './guards/google.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 
-dotenv.config()
+dotenv.config();
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -64,8 +64,10 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
   handleRedirect(@Res() res: Response, @Req() req: Request) {
-    passport.authenticate('google', { successRedirect: `${process.env.CLIENT_URL}/${(req.user as User).id}` });
-    res.redirect(`${process.env.CLIENT_URL}/${(req.user as User).id}`);
+    passport.authenticate('google', {
+      successRedirect: `https://app-review-d36e65.netlify.app/review/${(req.user as User).id}`,
+    });
+    res.redirect(`https://app-review-d36e65.netlify.app/review/${(req.user as User).id}`);
   }
 
   @UseGuards(GithubAuthGuard)
@@ -77,7 +79,9 @@ export class AuthController {
   @UseGuards(GithubAuthGuard)
   @Get('github/callback')
   handleRedirectGithub(@Res() res: Response, @Req() req: Request) {
-    passport.authenticate('github', { successRedirect: `${process.env.CLIENT_URL}/${(req.user as User).id}` });
-    res.redirect(`${process.env.CLIENT_URL}/${(req.user as User).id}`);
+    passport.authenticate('github', {
+      successRedirect: `https://app-review-d36e65.netlify.app/review/${(req.user as User).id}`,
+    });
+    res.redirect(`https://app-review-d36e65.netlify.app/review/${(req.user as User).id}`);
   }
 }

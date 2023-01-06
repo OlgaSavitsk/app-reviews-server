@@ -12,6 +12,8 @@ import { AuthenticatedGuard, GithubAuthGuard } from './guards/github.guard';
 import { GoogleAuthGuard } from './guards/google.guard';
 import { LocalAuthGuard } from './guards/local.guard';
 
+dotenv.config()
+
 @ApiTags('Authorization')
 @Controller('auth')
 export class AuthController {

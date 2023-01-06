@@ -26,7 +26,6 @@ import { UsersService } from '@users/users.service';
 import { DeleteResult } from 'typeorm';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
-import { Multer } from 'multer';
 import { multerOptions } from 'src/config/multerOptions';
 import { TransformInterceptor } from '@core/interceptors/transform.interceptor';
 import { GetReviewFilterDto } from './dto/get-review-filter.dto';
@@ -45,8 +44,8 @@ export class ReviewController {
   @Get()
   @HttpCode(HttpStatus.OK)
   public findAll(@Query() filterDto: GetReviewFilterDto): Promise<IReview[]> {
-    if(Object.keys(filterDto).length) {
-      return this.reviewService.getReviewWithFilter(filterDto)
+    if (Object.keys(filterDto).length) {
+      return this.reviewService.getReviewWithFilter(filterDto);
     }
     return this.reviewService.findAll();
   }
@@ -81,9 +80,7 @@ export class ReviewController {
     @Body() reviewDto: any,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [
-          new FileTypeValidator({ fileType: new RegExp('.(jpg|jpeg|png|gif)$') }),
-        ],
+        validators: [new FileTypeValidator({ fileType: new RegExp('.(jpg|jpeg|png|gif)$') })],
       })
     )
     file: any
@@ -121,9 +118,7 @@ export class ReviewController {
     @Body() updateReviewDto: any,
     @UploadedFile(
       new ParseFilePipe({
-        validators: [
-          new FileTypeValidator({ fileType: new RegExp('.(jpg|jpeg|png|gif)$') }),
-        ],
+        validators: [new FileTypeValidator({ fileType: new RegExp('.(jpg|jpeg|png|gif)$') })],
       })
     )
     file: any

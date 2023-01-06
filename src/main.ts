@@ -9,14 +9,16 @@ import * as passport from 'passport';
 import * as session from 'express-session';
 
 import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 5000;
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
     credentials: true,
     origin: 'https://app-review-d36e65.netlify.app',
   });
+  app.set('trust proxy', 1)
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());
   app.use(
@@ -24,6 +26,10 @@ async function bootstrap() {
       secret: 'adsftrhklc',
       resave: false,
       saveUninitialized: false,
+      cookie: {
+        sameSite: 'none',
+        secure: true
+      }
     }),
   );
   app.use(passport.initialize());

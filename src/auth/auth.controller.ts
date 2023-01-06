@@ -3,6 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@users/models/users.interface';
 import { Response, Request } from 'express';
 import * as passport from 'passport';
+import * as dotenv from 'dotenv';
 
 import { CreateUserDto } from 'src/users/dto/create-user-dto';
 import { AuthService } from './auth.service';

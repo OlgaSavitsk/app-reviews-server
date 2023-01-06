@@ -22,4 +22,4 @@ export enum GitHubLogin {
   GITHUB_CLIENT_SECRET = 'fdb4b85db4c7783de34564b12367b92cd10c1e56',
 }
 
-export const CLIENT_URL = 'https://app-review-d36e65.netlify.app/home';
+export const CLIENT_URL = 'https://app-review-d36e65.netlify.app/review';

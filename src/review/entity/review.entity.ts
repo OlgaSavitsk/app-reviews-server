@@ -43,5 +43,9 @@ export class ReviewEntity {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
+  @JoinColumn({name: 'userId'})
   user: UserEntity;
+
+  @Column({ nullable: true })
+  userId: string
 }

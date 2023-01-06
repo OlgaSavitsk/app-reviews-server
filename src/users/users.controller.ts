@@ -34,7 +34,7 @@ export class UsersController {
     type: [UserEntity],
   })
   @UseGuards(AuthenticatedGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  //@Roles(Role.ADMIN)
   @Get()
   @HttpCode(HttpStatus.OK)
   public findAll() {

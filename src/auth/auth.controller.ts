@@ -1,5 +1,6 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '@users/models/users.interface';
 import { Response, Request } from 'express';
 import * as passport from 'passport';
 
@@ -60,9 +61,9 @@ export class AuthController {
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
-  handleRedirect(@Res() res: Response) {
-    passport.authenticate('google', { successRedirect: CLIENT_URL });
-    res.redirect(CLIENT_URL);
+  handleRedirect(@Res() res: Response, @Req() req: Request) {
+    passport.authenticate('google', { successRedirect: `${CLIENT_URL}/${(req.user as User).id}` });
+    res.redirect(`${CLIENT_URL}/${(req.user as User).id}`);
   }
 
   @UseGuards(GithubAuthGuard)
@@ -73,8 +74,8 @@ export class AuthController {
 
   @UseGuards(GithubAuthGuard)
   @Get('github/callback')
-  handleRedirectGithub(@Res() res: Response) {
-    // passport.authenticate('github', { successRedirect: CLIENT_URL });
-    res.redirect(CLIENT_URL);
+  handleRedirectGithub(@Res() res: Response, @Req() req: Request) {
+    passport.authenticate('github', { successRedirect: `${CLIENT_URL}/${(req.user as User).id}` });
+    res.redirect(`${CLIENT_URL}/${(req.user as User).id}`);
   }
 }

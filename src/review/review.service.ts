@@ -9,7 +9,6 @@ import { IReview } from './models/review.interface';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { CreateReviewDto } from './dto/create-review-dto';
 import { UserResponse } from '@users/models/users.interface';
-import { UserEntity } from '@users/entity/user.entity';
 import { GetReviewFilterDto } from './dto/get-review-filter.dto';
 
 @Injectable()
@@ -17,8 +16,6 @@ export class ReviewService {
   constructor(
     @InjectRepository(ReviewEntity)
     private reviewRepository: Repository<ReviewEntity>,
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>
   ) {}
 
   public async findAll(): Promise<IReview[]> {
@@ -28,20 +25,23 @@ export class ReviewService {
 
   public async getReviewWithFilter(filterDto: GetReviewFilterDto): Promise<IReview[]> {
     const { search } = filterDto;
-    let reviews = await this.findAll();
-    reviews = reviews.filter(
+    if(search === 'null') return []
+    let searchReviews = (await this.findAll()).filter(
       (review) =>
         review.title.includes(search) ||
         review.name.includes(search) ||
         review.description.includes(search) ||
         review.category.includes(search)
     );
-    return reviews;
+    if (searchReviews.length === 0) {
+      throw new NotFoundException(ExceptionsMessage.NOT_FOUND_REVIEW);
+    }
+    return searchReviews;
   }
 
   public async findAllTags(): Promise<string[]> {
     const reviews = await this.findAll();
-    const tags = reviews.map((review) => review.tags).flat();
+    const tags = (reviews.map((review) => review.tags)).flat();
     return tags;
   }
 
@@ -62,7 +62,6 @@ export class ReviewService {
       ])
       .leftJoinAndSelect('reviews.user', 'user')
       .getMany();
-    //.leftJoin('reviews.files', 'files')
     return reviews ?? null;
   }
 
@@ -71,10 +70,6 @@ export class ReviewService {
     const reviewCreated = await this.reviewRepository.create({ ...dto, createdAt: date, user });
     if (reviewCreated) {
       const review = await this.reviewRepository.save(reviewCreated);
-      // await this.userRepository.save({
-      //   ...user,
-      //   reviews: [...user.reviews, review],
-      // });
       return review;
     }
     throw new HttpException(ExceptionsMessage.BAD_REQUEST, StatusCodes.BAD_REQUEST);

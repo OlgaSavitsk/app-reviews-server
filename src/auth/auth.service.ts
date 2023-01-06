@@ -61,6 +61,7 @@ export class AuthService {
     }
     const newUser = await this.userService.createUser({
       ...details,
+      roles: [Role.USER],
       createdAt: date,
       updatedAt: date,
     });
@@ -90,7 +91,7 @@ export class AuthService {
 
   async checkUser(login: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
-      where: { username: login },
+      where: { login: login },
       relations: ['reviews'],
     });
     if (!user) {
@@ -123,8 +124,9 @@ export class AuthService {
   }
 
   async validateUser(name: string, password: string): Promise<UserResponse> {
+    console.log('11111', name);
     const user = await this.userRepository.findOne({
-      where: { username: name },
+      where: [{ username: name }, { login: name }],
       relations: ['reviews'],
     });
     if (!user) {

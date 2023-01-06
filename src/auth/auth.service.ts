@@ -124,7 +124,6 @@ export class AuthService {
   }
 
   async validateUser(name: string, password: string): Promise<UserResponse> {
-    console.log('11111', name);
     const user = await this.userRepository.findOne({
       where: [{ username: name }, { login: name }],
       relations: ['reviews'],

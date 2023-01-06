@@ -13,11 +13,12 @@ import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
-    UsersModule,
-    ReviewModule,
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: '.env',
     }),
+    UsersModule,
+    ReviewModule,
     TypeOrmModule.forRoot(dataSource.options),
     AuthModule,
     CoreModule,

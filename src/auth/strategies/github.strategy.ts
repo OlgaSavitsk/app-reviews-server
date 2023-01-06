@@ -12,7 +12,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     super({
       clientID: GitHubLogin.GITHUB_CLIENT_ID,
       clientSecret: GitHubLogin.GITHUB_CLIENT_SECRET,
-      callbackURL: `${process.env.CLIENT_URL}/auth/github/callback`,
+      callbackURL: 'https://app-review-d36e65.netlify.app/auth/github/callback',
       scope: ['user:email'],
     });
   }

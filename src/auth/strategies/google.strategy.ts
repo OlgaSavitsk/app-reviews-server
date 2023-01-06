@@ -12,7 +12,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     super({
       clientID: GoogleLogin.GOOGLE_CLIENT_ID,
       clientSecret: GoogleLogin.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.CLIENT_URL}/auth/google/callback`,
+      callbackURL: 'https://app-review-d36e65.netlify.app/auth/google/callback',
       scope: ['profile', 'email'],
     });
   }

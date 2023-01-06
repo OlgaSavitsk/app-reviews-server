@@ -4,7 +4,6 @@ import { User } from '@users/models/users.interface';
 import { Response, Request } from 'express';
 import * as passport from 'passport';
 
-import { CLIENT_URL } from 'src/app.constant';
 import { CreateUserDto } from 'src/users/dto/create-user-dto';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signin-dto';
@@ -62,8 +61,8 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   @Get('google/callback')
   handleRedirect(@Res() res: Response, @Req() req: Request) {
-    passport.authenticate('google', { successRedirect: `${CLIENT_URL}/${(req.user as User).id}` });
-    res.redirect(`${CLIENT_URL}/${(req.user as User).id}`);
+    passport.authenticate('google', { successRedirect: `${process.env.CLIENT_URL}/${(req.user as User).id}` });
+    res.redirect(`${process.env.CLIENT_URL}/${(req.user as User).id}`);
   }
 
   @UseGuards(GithubAuthGuard)
@@ -75,7 +74,7 @@ export class AuthController {
   @UseGuards(GithubAuthGuard)
   @Get('github/callback')
   handleRedirectGithub(@Res() res: Response, @Req() req: Request) {
-    passport.authenticate('github', { successRedirect: `${CLIENT_URL}/${(req.user as User).id}` });
-    res.redirect(`${CLIENT_URL}/${(req.user as User).id}`);
+    passport.authenticate('github', { successRedirect: `${process.env.CLIENT_URL}/${(req.user as User).id}` });
+    res.redirect(`${process.env.CLIENT_URL}/${(req.user as User).id}`);
   }
 }

@@ -8,20 +8,15 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
-  Put,
-  UseGuards,
+  Put
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user-dto';
-import { UpdateStatusDto } from './dto/update-user-dto';
+import { UpdateUserDto } from './dto/update-user-dto';
 import { UsersService } from './users.service';
 import { UserEntity } from './entity/user.entity';
-import { Roles } from 'src/core/decorators/roles.decorator';
-import { RolesGuard } from 'src/auth/guards/role.guard';
-import { Role } from 'src/roles/entity/role.enum';
 import { UserResponse } from './models/users.interface';
-import { AuthenticatedGuard } from '@auth/guards/github.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -33,8 +28,6 @@ export class UsersController {
     status: HttpStatus.OK,
     type: [UserEntity],
   })
-  //@UseGuards(AuthenticatedGuard, RolesGuard)
-  //@Roles(Role.ADMIN)
   @Get()
   @HttpCode(HttpStatus.OK)
   public findAll() {
@@ -65,15 +58,16 @@ export class UsersController {
   @ApiOperation({ summary: 'Update user by id' })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: UpdateStatusDto,
+    type: UpdateUserDto,
   })
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   public async update(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-    @Body() { status }: UpdateStatusDto
+    @Body() dto: UpdateUserDto
   ) {
-    return await this.userService.update(id, status);
+    console.log(dto)
+    return await this.userService.update(id, dto);
   }
 
   @ApiOperation({ summary: 'Delete user by id' })

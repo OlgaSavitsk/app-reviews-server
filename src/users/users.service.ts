@@ -7,6 +7,7 @@ import { CreateUserDto } from './dto/create-user-dto';
 import { UserEntity } from './entity/user.entity';
 import { ExceptionsMessage } from 'src/app.constant';
 import { UserResponse } from './models/users.interface';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +24,7 @@ export class UsersService {
   public async findOne(id: string): Promise<UserResponse> {
     const user = await this.userRepository.findOne({
       where: { id: id },
-      relations: ['reviews']
+      relations: ['reviews'],
     });
     return user.toResponse() ?? null;
   }
@@ -37,20 +38,22 @@ export class UsersService {
     throw new HttpException(ExceptionsMessage.BAD_REQUEST, StatusCodes.BAD_REQUEST);
   }
 
-  public async update(id: string, newStatus: string): Promise<UserResponse> {
+  public async update(id: string, dto: UpdateUserDto): Promise<UserResponse> {
     const userUpdated = await this.userRepository.findOne({
       where: { id: id },
     });
     if (!userUpdated) {
       throw new NotFoundException(ExceptionsMessage.NOT_FOUND_USER);
     }
-    if (newStatus === userUpdated.status) {
+    if (dto.status === userUpdated.status) {
       throw new ForbiddenException(ExceptionsMessage.FORBIDDEN);
     }
-    const updateUser = await await this.userRepository.save({
+    const updateUser = await this.userRepository.save({
       ...userUpdated,
-      status: newStatus,
+      status: dto.status,
+      liked: [...dto.liked],
     });
+    console.log(dto, updateUser)
     return updateUser;
   }
 

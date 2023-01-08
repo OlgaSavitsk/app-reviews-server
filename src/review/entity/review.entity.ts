@@ -31,7 +31,7 @@ export class ReviewEntity {
   @Column({ nullable: true })
   like: number | null;
 
-  @Column({type: 'varchar', nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   img: any;
 
   @Column({ nullable: true })
@@ -44,11 +44,11 @@ export class ReviewEntity {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn({name: 'userId'})
+  @JoinColumn({ name: 'userId' })
   user: UserEntity;
 
   @Column({ nullable: true })
-  userId: string
+  userId: string;
 
   @OneToMany(() => MessageEntity, (message) => message.review, {
     cascade: true,

@@ -10,22 +10,25 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { CreateReviewDto } from './dto/create-review-dto';
 import { UserResponse } from '@users/models/users.interface';
 import { GetReviewFilterDto } from './dto/get-review-filter.dto';
+import { IPaginationOptions, paginate, Pagination } from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class ReviewService {
   constructor(
     @InjectRepository(ReviewEntity)
-    private reviewRepository: Repository<ReviewEntity>,
+    private reviewRepository: Repository<ReviewEntity>
   ) {}
 
   public async findAll(): Promise<IReview[]> {
-    const reviews = await this.reviewRepository.find();
+    const reviews = await this.reviewRepository.find({
+      relations: ['messages'],
+    });
     return reviews;
   }
 
   public async getReviewWithFilter(filterDto: GetReviewFilterDto): Promise<IReview[]> {
     const { search } = filterDto;
-    if(search === 'null') return []
+    if (search === 'null') return [];
     let searchReviews = (await this.findAll()).filter(
       (review) =>
         review.title.includes(search) ||
@@ -41,26 +44,28 @@ export class ReviewService {
 
   public async findAllTags(): Promise<string[]> {
     const reviews = await this.findAll();
-    const tags = (reviews.map((review) => review.tags)).flat();
+    const tags = reviews.map((review) => review.tags).flat();
     return tags;
   }
 
   public async getById(id: string): Promise<IReview[]> {
     const reviews = await this.reviewRepository
-      .createQueryBuilder('reviews')
+      .createQueryBuilder('review')
       .where({ id: id })
       .select([
-        'reviews.id',
-        'reviews.name',
-        'reviews.title',
-        'reviews.description',
-        'reviews.tags',
-        'reviews.category',
-        'reviews.rating',
-        'reviews.img',
-        'reviews.userId',
+        'review.id',
+        'review.name',
+        'review.title',
+        'review.description',
+        'review.tags',
+        'review.category',
+        'review.rating',
+        'review.img',
+        'review.userId',
+        'review.messages',
       ])
-      .leftJoinAndSelect('reviews.user', 'user')
+      .leftJoinAndSelect('review.user', 'user')
+      .leftJoin('review.messages', 'messages')
       .getMany();
     return reviews ?? null;
   }
@@ -87,13 +92,28 @@ export class ReviewService {
     return await this.reviewRepository.save({ ...reviewUpdated, ...dto, createdAt: date });
   }
 
-  findFileByReviewId(id: string) {}
-
   public async delete(id: string): Promise<DeleteResult> {
     const result = await this.reviewRepository.delete({ id });
     if (result.affected === 0) {
       throw new NotFoundException(ExceptionsMessage.NOT_FOUND_REVIEW);
     }
     return result;
+  }
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<ReviewEntity>> {
+    const reviews = await this.reviewRepository
+      .createQueryBuilder('reviews')
+      .select([
+        'reviews.createdAt',
+        'reviews.title',
+        'reviews.filePath',
+        'reviews.userId',
+        'reviews.rating',
+        'reviews.score',
+        'reviews.tags',
+        'reviews.id',
+      ])
+      .orderBy('reviews.createdAt', 'DESC');
+    return paginate<ReviewEntity>(reviews, options);
   }
 }

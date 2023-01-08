@@ -1,5 +1,6 @@
 import { UserEntity } from '@users/entity/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { MessageEntity } from 'src/messages/entities/message.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('review')
 export class ReviewEntity {
@@ -48,4 +49,12 @@ export class ReviewEntity {
 
   @Column({ nullable: true })
   userId: string
+
+  @OneToMany(() => MessageEntity, (message) => message.review, {
+    cascade: true,
+    eager: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  messages: MessageEntity[];
 }

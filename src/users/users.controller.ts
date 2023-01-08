@@ -33,7 +33,7 @@ export class UsersController {
     status: HttpStatus.OK,
     type: [UserEntity],
   })
-  @UseGuards(AuthenticatedGuard, RolesGuard)
+  //@UseGuards(AuthenticatedGuard, RolesGuard)
   //@Roles(Role.ADMIN)
   @Get()
   @HttpCode(HttpStatus.OK)

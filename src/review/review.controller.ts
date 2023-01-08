@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   FileTypeValidator,
   Get,
@@ -8,6 +9,7 @@ import {
   HttpStatus,
   Param,
   ParseFilePipe,
+  ParseIntPipe,
   ParseUUIDPipe,
   Post,
   Put,
@@ -27,12 +29,11 @@ import { DeleteResult } from 'typeorm';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { multerOptions } from 'src/config/multerOptions';
-import { TransformInterceptor } from '@core/interceptors/transform.interceptor';
 import { GetReviewFilterDto } from './dto/get-review-filter.dto';
+import { IPaginationOptions, Pagination } from 'nestjs-typeorm-paginate';
 
 @ApiTags('Review')
 @Controller('review')
-//@UseInterceptors(TransformInterceptor)
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService, private userService: UsersService) {}
 
@@ -48,6 +49,17 @@ export class ReviewController {
       return this.reviewService.getReviewWithFilter(filterDto);
     }
     return this.reviewService.findAll();
+  }
+
+  @Get('paginate')
+  @HttpCode(HttpStatus.OK)
+  public reviewPaginate(
+    @Query('page', new DefaultValuePipe(2), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(0), ParseIntPipe) limit: number
+  ): Promise<Pagination<ReviewEntity>> {
+    console.log(page, limit)
+    const option: IPaginationOptions = { limit, page };
+    return this.reviewService.paginate(option);
   }
 
   @Get('tags')

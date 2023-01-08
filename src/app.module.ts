@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
 import { PassportModule } from '@nestjs/passport';
 import { ReviewModule } from './review/review.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ReviewModule } from './review/review.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    MessagesModule,
     UsersModule,
     ReviewModule,
     TypeOrmModule.forRoot(dataSource.options),

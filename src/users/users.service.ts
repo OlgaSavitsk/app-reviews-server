@@ -22,7 +22,6 @@ export class UsersService {
 
   public async findOne(id: string): Promise<UserResponse> {
     const user = await this.userRepository.findOne({
-      //select: ['id', 'username', 'login', 'roles', 'reviews'],
       where: { id: id },
       relations: ['reviews']
     });
@@ -31,8 +30,6 @@ export class UsersService {
 
   public async createUser(dto: CreateUserDto): Promise<UserResponse> {
     const userCreated = await this.userRepository.create(dto);
-    //const role = await this.roleService.getUserRole(dto.role);
-    //userCreated.roles = [role];
     if (userCreated) {
       const user = (await this.userRepository.save(userCreated)).toResponse();
       return user;
@@ -63,11 +60,4 @@ export class UsersService {
       throw new NotFoundException(ExceptionsMessage.NOT_FOUND_USER);
     }
   }
-
-  // async addRole(dto: AddRoleDto) {
-  //   const user = await this.userRepository.findOne({
-  //     where: { id: dto.userId },
-  //   });
-  //   const role = await this.roleService.getUserRole(dto.value);
-  // }
 }

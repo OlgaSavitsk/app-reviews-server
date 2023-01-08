@@ -16,7 +16,6 @@ import { MessagesModule } from './messages/messages.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     MessagesModule,
     UsersModule,

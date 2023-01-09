@@ -1,3 +1,5 @@
+import { IMessage } from "src/messages/model/messages.model";
+
 export interface IReview {
   id: string;
   name: string;
@@ -11,4 +13,5 @@ export interface IReview {
   score: number;
   like?: number;
   createdAt?: string;
+  messages: IMessage[]
 }

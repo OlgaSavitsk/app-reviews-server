@@ -34,7 +34,8 @@ export class ReviewService {
         review.title.includes(search) ||
         review.name.includes(search) ||
         review.description.includes(search) ||
-        review.category.includes(search)
+        review.category.includes(search) ||
+        review.messages.map((message) => message.text.indexOf(search) !== -1).filter(Boolean)
     );
     if (searchReviews.length === 0) {
       throw new NotFoundException(ExceptionsMessage.NOT_FOUND_REVIEW);

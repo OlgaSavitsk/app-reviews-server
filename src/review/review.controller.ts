@@ -57,7 +57,6 @@ export class ReviewController {
     @Query('page', new DefaultValuePipe(2), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(0), ParseIntPipe) limit: number
   ): Promise<Pagination<ReviewEntity>> {
-    console.log(page, limit)
     const option: IPaginationOptions = { limit, page };
     return this.reviewService.paginate(option);
   }

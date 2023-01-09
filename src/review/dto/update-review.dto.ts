@@ -26,13 +26,16 @@ export class UpdateReviewDto {
   @IsNotEmpty({ message: 'The score review cannot be empty' })
   score: number;
 
-  rating?: number;
+  rating?: number[];
 
-  like?: number;
+  likes?: number;
+
+  likedUser?: string[];
 
   img?: any;
 
   createdAt?: string;
 
+  @IsOptional()
   filePath?: string
 }

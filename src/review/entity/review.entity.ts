@@ -22,20 +22,26 @@ export class ReviewEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Column({ nullable: true })
-  rating: number | null;
+  @Column({ type: 'text', array: true, nullable: true })
+  rating: number[] | null;
 
   @Column({ nullable: true })
   score: number;
 
   @Column({ nullable: true })
-  like: number | null;
+  likes: number | null;
+
+  @Column({ type: 'text', array: true, nullable: true })
+  likedUser: string[];
 
   @Column({ type: 'varchar', nullable: true })
   img: any;
 
   @Column({ nullable: true })
   createdAt: string;
+
+  @Column({ nullable: true })
+  updateddAt: string;
 
   @Column({ nullable: true })
   filePath: string | null;

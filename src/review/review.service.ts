@@ -31,11 +31,11 @@ export class ReviewService {
     if (search === 'null') return [];
     let searchReviews = (await this.findAll()).filter(
       (review) =>
-        review.title.includes(search) ||
-        review.name.includes(search) ||
+        review.title.indexOf(search) !== -1 ||
+        review.name.indexOf(search) !== -1 ||
         review.description.includes(search) ||
         review.category.includes(search) ||
-        review.messages.map((message) => message.text.indexOf(search) !== -1).filter(Boolean)
+        review.messages.map((message) => message.text.indexOf(search) !== -1).includes(true)
     );
     if (searchReviews.length === 0) {
       throw new NotFoundException(ExceptionsMessage.NOT_FOUND_REVIEW);
@@ -90,7 +90,7 @@ export class ReviewService {
     if (!reviewUpdated) {
       throw new NotFoundException(ExceptionsMessage.NOT_FOUND_REVIEW);
     }
-    return await this.reviewRepository.save({ ...reviewUpdated, ...dto, createdAt: date });
+    return await this.reviewRepository.save({ ...reviewUpdated, ...dto, updatedAt: date });
   }
 
   public async delete(id: string): Promise<DeleteResult> {
@@ -113,6 +113,12 @@ export class ReviewService {
         'reviews.score',
         'reviews.tags',
         'reviews.id',
+        'reviews.rating',
+        'reviews.name',
+        'reviews.description',
+        'reviews.score',
+        'reviews.likes',
+        'reviews.img',
       ])
       .orderBy('reviews.createdAt', 'DESC');
     return paginate<ReviewEntity>(reviews, options);

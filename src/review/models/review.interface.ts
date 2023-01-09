@@ -7,7 +7,7 @@ export interface IReview {
   category: string;
   tags: string[];
   description: string;
-  rating: number;
+  rating: number[];
   img: any;
   filePath: string,
   score: number;

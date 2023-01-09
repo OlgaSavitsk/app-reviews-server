@@ -47,11 +47,18 @@ export class UserEntity {
   })
   reviews: ReviewEntity[];
 
-  @Column({ type: 'text', array: true, default: [], nullable: true })
-  liked: string[] | null;
-
   toResponse() {
     const { id, username, login, createdAt, updatedAt, status, roles, photos, reviews } = this;
-    return { id, username, login, createdAt, updatedAt, status, roles, photos, reviews };
+    return {
+      id,
+      username,
+      login,
+      createdAt,
+      updatedAt,
+      status,
+      roles,
+      photos,
+      reviews,
+    };
   }
 }

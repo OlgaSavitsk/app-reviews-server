@@ -16,9 +16,10 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
     credentials: true,
-    origin: 'https://app-review-d36e65.netlify.app',
+    //origin: 'https://app-review-d36e65.netlify.app',
+    origin: 'http://localhost:4200',
   });
-  app.set('trust proxy', 1);
+  //app.set('trust proxy', 1)
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());
   app.use(
@@ -27,9 +28,9 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        sameSite: 'none',
-        secure: true,
-        maxAge: 3600,
+        // sameSite: 'none',
+        // secure: true,
+        // maxAge: 3600,
       },
     })
   );

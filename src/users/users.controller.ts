@@ -66,7 +66,6 @@ export class UsersController {
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() dto: UpdateUserDto
   ) {
-    console.log(dto)
     return await this.userService.update(id, dto);
   }
 

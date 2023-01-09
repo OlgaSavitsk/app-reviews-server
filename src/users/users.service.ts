@@ -48,12 +48,11 @@ export class UsersService {
     if (dto.status === userUpdated.status) {
       throw new ForbiddenException(ExceptionsMessage.FORBIDDEN);
     }
-    const updateUser = await this.userRepository.save({
-      ...userUpdated,
-      status: dto.status,
-      liked: [...dto.liked],
-    });
-    console.log(dto, updateUser)
+    let updateUser
+      updateUser = await this.userRepository.save({
+        ...userUpdated,
+        status: dto.status,
+      });
     return updateUser;
   }
 

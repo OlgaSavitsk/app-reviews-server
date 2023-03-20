@@ -18,7 +18,7 @@ async function bootstrap() {
     credentials: true,
     origin: 'https://app-review-d36e65.netlify.app',
   });
-  app.set('trust proxy', 1);
+  app.set('trust proxy', 1)
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(cookieParser());
   app.use(

@@ -12,7 +12,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     super({
       clientID: GitHubLogin.GITHUB_CLIENT_ID,
       clientSecret: GitHubLogin.GITHUB_CLIENT_SECRET,
-      callbackURL: 'https://app-reviews-server-production.up.railway.app/auth/github/callback',
+      callbackURL: 'https://review-project.onrender.com/auth/github/callback',
       scope: ['user:email'],
     });
   }

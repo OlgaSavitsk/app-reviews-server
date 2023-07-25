@@ -16,7 +16,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors({
     credentials: true,
-    origin: 'https://app-review-d36e65.netlify.app',
+    origin: 'https://review-project-app.onrender.com',
   });
   app.set('trust proxy', 1)
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
@@ -27,8 +27,8 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        sameSite: 'none',
         secure: true,
+        sameSite: 'none',
         maxAge: 3600,
       },
     })
